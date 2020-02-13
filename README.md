@@ -10,6 +10,9 @@ This mod applies the same inventory sequencing effect that a Shrine of Order app
 3. Launch the game and enjoy! To remove you simply need to delete the `SequenceOnDeath.dll` file.
 
 ## Changelog
+### Version 1.1.1
+- Only apply to players, not monsters (again)
+
 ### Version 1.1.0
 - Fix Dio's Best Friend interactions
 

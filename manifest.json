@@ -1,6 +1,6 @@
 {
     "name": "SequenceOnDeath",
-    "version_number": "1.1.0",
+    "version_number": "1.1.1",
     "website_url": "https://github.com/NotTsunami/SequenceOnDeath",
     "description": "Applies the inventory sequencing of a Shrine of Order on player deaths. A successor to OrderOnDeath.",
     "dependencies": [

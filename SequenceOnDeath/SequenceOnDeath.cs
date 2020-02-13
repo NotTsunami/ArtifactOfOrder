@@ -2,10 +2,10 @@
 using RoR2;
 using UnityEngine;
 
-namespace Tsunami
+namespace SequenceOnDeath
 {
     [BepInDependency("com.bepis.r2api")]
-    [BepInPlugin("dev.tsunami.SequenceOnDeath", "SequenceOnDeath", "1.1.0")]
+    [BepInPlugin("dev.tsunami.SequenceOnDeath", "SequenceOnDeath", "1.1.1")]
     public class SequenceOnDeath : BaseUnityPlugin
     {
         public void Awake()
@@ -17,6 +17,9 @@ namespace Tsunami
                 int dioCount = GetDioCount(self);
 
                 orig(self, body);
+
+                // Bail if body belongs to a monster
+                if (!body.isPlayerControlled) return;
 
                 // Bail if we're single player without a Dio's Best Friend
                 if (!IsMultiplayer() && dioCount == GetDioCount(self)) return;
