@@ -24,3 +24,5 @@ This mod applies the same inventory sequencing effect that a Shrine of Order app
 
 ### Version 1.0.1
 - Only apply to players, not monsters
+
+[Refresh Shield](https://icons8.com/icons/set/refresh-shield) icon by [Icons8](https://icons8.com).
