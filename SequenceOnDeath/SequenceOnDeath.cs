@@ -1,19 +1,21 @@
 ﻿using BepInEx;
+using R2API.Utils;
 using RoR2;
 using UnityEngine;
 
 namespace SequenceOnDeath
 {
+    [NetworkCompatibility(CompatibilityLevel.NoNeedForSync, VersionStrictness.DifferentModVersionsAreOk)]
     [BepInDependency("com.bepis.r2api")]
-    [BepInPlugin("dev.tsunami.SequenceOnDeath", "SequenceOnDeath", "1.1.1")]
+    [BepInPlugin("dev.tsunami.SequenceOnDeath", "SequenceOnDeath", "1.1.2")]
     public class SequenceOnDeath : BaseUnityPlugin
     {
         public void Awake()
         {
             On.RoR2.CharacterMaster.OnBodyDeath += (orig, self, body) =>
             {
-                // The original function removes a Dio's Best Friend from the inventory if one is available,
-                // so the easiest way to track usage is to compare the count before and after the function
+                // The original OnBodyDeath function removes a Dio's Best Friend from the inventory if one is
+                // available, so the easiest way to track usage is to compare the count before and after the function
                 int dioCount = GetDioCount(self);
 
                 orig(self, body);
@@ -44,11 +46,17 @@ namespace SequenceOnDeath
             };
         }
 
+        /// <summary>
+        /// Return true if more then 1 player in-game
+        /// </summary>
         private static bool IsMultiplayer()
         {
             return PlayerCharacterMasterController.instances.Count > 1;
         }
 
+        /// <summary>
+        /// Returns amount of unused Dio's Best Friends owned by player
+        /// </summary>
         private static int GetDioCount(CharacterMaster master)
         {
             return master.inventory.GetItemCount(ItemIndex.ExtraLife);
