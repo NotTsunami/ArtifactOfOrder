@@ -3,7 +3,7 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 16
 VisualStudioVersion = 16.0.29728.190
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SequenceOnDeath", "SequenceOnDeath\SequenceOnDeath.csproj", "{AB878E66-B582-4DC9-A395-414E18B278DC}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ArtifactOfOrder", "ArtifactOfOrder\ArtifactOfOrder.csproj", "{AB878E66-B582-4DC9-A395-414E18B278DC}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

@@ -1,17 +1,26 @@
 ﻿using BepInEx;
+using R2API;
 using R2API.Utils;
 using RoR2;
 using UnityEngine;
 
-namespace SequenceOnDeath
+namespace ArtifactOfOrder
 {
     [NetworkCompatibility(CompatibilityLevel.NoNeedForSync, VersionStrictness.DifferentModVersionsAreOk)]
+    [R2APISubmoduleDependency(nameof(LoadoutAPI))]
     [BepInDependency("com.bepis.r2api")]
-    [BepInPlugin("dev.tsunami.SequenceOnDeath", "SequenceOnDeath", "1.1.2")]
-    public class SequenceOnDeath : BaseUnityPlugin
+    [BepInPlugin("dev.tsunami.ArtifactOfOrder", "ArtifactOfOrder", "1.0.0")]
+    public class ArtifactOfOrder : BaseUnityPlugin
     {
         public void Awake()
         {
+            Order.nameToken = "Artifact of Order";
+            Order.descriptionToken = "Applies the sequencing effect of a Shrine of Order on each death";
+            Order.smallIconDeselectedSprite = LoadoutAPI.CreateSkinIcon(Color.white, Color.white, Color.white, Color.white);
+            Order.smallIconSelectedSprite = LoadoutAPI.CreateSkinIcon(Color.gray, Color.white, Color.white, Color.white);
+
+            ArtifactCatalog.getAdditionalEntries += (list) => { list.Add(Order); };
+
             On.RoR2.CharacterMaster.OnBodyDeath += (orig, self, body) =>
             {
                 // The original OnBodyDeath function removes a Dio's Best Friend from the inventory if one is
@@ -20,11 +29,14 @@ namespace SequenceOnDeath
 
                 orig(self, body);
 
+                // Bail if the artifact is not enabled
+                if (!RunArtifactManager.instance.IsArtifactEnabled(Order.artifactIndex)) return;
+
                 // Bail if body belongs to a monster
                 if (!body.isPlayerControlled) return;
 
                 // Bail if we're single player without a Dio's Best Friend
-                if (!IsMultiplayer() && dioCount == GetDioCount(self)) return;
+                if (!IsMultiplayer() && (dioCount == GetDioCount(self))) return;
 
                 // Sequence the inventory
                 self.inventory.ShrineRestackInventory(new Xoroshiro128Plus(Run.instance.stageRng.nextUlong));
@@ -45,6 +57,9 @@ namespace SequenceOnDeath
                     }, true);
             };
         }
+
+        // Artifact definition
+        public ArtifactDef Order = ScriptableObject.CreateInstance<ArtifactDef>();
 
         /// <summary>
         /// Return true if more then 1 player in-game
