@@ -10,6 +10,10 @@ This mod adds a new artifact, that when selected, applies the same inventory seq
 3. Launch the game and enjoy! To remove you simply need to delete the `ArtifactOfOrder.dll` file.
 
 ## Changelog
+### Version 1.0.1
+- Fixed icon sharpness and color
+- Slightly changed Artifact description
+
 ### Version 1.0.0
 - Refactored SequenceOnDeath as an artifact
 
