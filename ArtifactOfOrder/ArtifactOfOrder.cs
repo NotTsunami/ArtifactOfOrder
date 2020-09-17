@@ -1,4 +1,5 @@
-﻿using BepInEx;
+﻿using System;
+using BepInEx;
 using R2API;
 using R2API.Utils;
 using RoR2;
@@ -7,7 +8,6 @@ using UnityEngine;
 namespace ArtifactOfOrder
 {
     [NetworkCompatibility(CompatibilityLevel.NoNeedForSync, VersionStrictness.DifferentModVersionsAreOk)]
-    [R2APISubmoduleDependency(nameof(LoadoutAPI))]
     [BepInDependency("com.bepis.r2api")]
     [BepInPlugin("dev.tsunami.ArtifactOfOrder", "ArtifactOfOrder", "1.0.0")]
     public class ArtifactOfOrder : BaseUnityPlugin
@@ -16,8 +16,8 @@ namespace ArtifactOfOrder
         {
             Order.nameToken = "Artifact of Order";
             Order.descriptionToken = "Applies the sequencing effect of a Shrine of Order on each death";
-            Order.smallIconDeselectedSprite = LoadoutAPI.CreateSkinIcon(Color.white, Color.white, Color.white, Color.white);
-            Order.smallIconSelectedSprite = LoadoutAPI.CreateSkinIcon(Color.gray, Color.white, Color.white, Color.white);
+            Order.smallIconDeselectedSprite = CreateSprite(Properties.Resources.artifact_unselected);
+            Order.smallIconSelectedSprite = CreateSprite(Properties.Resources.artifact_selected);
 
             ArtifactCatalog.getAdditionalEntries += (list) => { list.Add(Order); };
 
@@ -60,6 +60,20 @@ namespace ArtifactOfOrder
 
         // Artifact definition
         public ArtifactDef Order = ScriptableObject.CreateInstance<ArtifactDef>();
+
+        // Helper function to load image into a Texture2D, which is then used to generate the sprite
+        // Based on code from: https://github.com/risk-of-thunder/R2Wiki/wiki/Embedding-and-loading-resources-(The-sane-way)
+        public static Sprite CreateSprite(Byte[] resourceBytes)
+        {
+            // Check to make sure that the byte array supplied is not null, and throw an appropriate exception if they are.
+            if (resourceBytes == null) throw new ArgumentNullException(nameof(resourceBytes));
+	
+            // Create a temporary texture, then load the texture onto it.
+            var tex = new Texture2D(128, 128, TextureFormat.RGBAFloat, false);
+            tex.LoadImage(resourceBytes, false);
+	
+            return Sprite.Create(tex, new Rect(0f, 0f, tex.width, tex.height), new Vector2(0.5f, 0.5f));
+        }
 
         /// <summary>
         /// Return true if more then 1 player in-game
