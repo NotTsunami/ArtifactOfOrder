@@ -1,10 +1,9 @@
-﻿using System;
-using BepInEx;
+﻿using BepInEx;
 using R2API.Utils;
-using RoR2;
-using UnityEngine;
-using System.Reflection;
 using R2API;
+using RoR2;
+using System.Reflection;
+using UnityEngine;
 
 
 namespace ArtifactOfOrder
@@ -58,7 +57,7 @@ namespace ArtifactOfOrder
                     subjectAsCharacterBody = body,
                     baseToken = "SHRINE_RESTACK_USE_MESSAGE"
                 });
-                EffectManager.SpawnEffect(Resources.Load<GameObject>("Prefabs/Effects/ShrineUseEffect"), 
+                EffectManager.SpawnEffect(Resources.Load<GameObject>("Prefabs/Effects/ShrineUseEffect"),
                     new EffectData
                     {
                         origin = body.footPosition,
