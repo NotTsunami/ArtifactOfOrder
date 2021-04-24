@@ -1,31 +1,51 @@
-﻿using System;
-using BepInEx;
+﻿using BepInEx;
 using R2API.Utils;
+using R2API;
 using RoR2;
+using System;
+using System.Reflection;
 using UnityEngine;
+
 
 namespace ArtifactOfOrder
 {
     [NetworkCompatibility(CompatibilityLevel.EveryoneMustHaveMod, VersionStrictness.EveryoneNeedSameModVersion)]
     [BepInDependency("com.bepis.r2api")]
-    [BepInPlugin("dev.tsunami.ArtifactOfOrder", "ArtifactOfOrder", "1.0.1")]
+    [BepInPlugin("dev.tsunami.ArtifactOfOrder", "ArtifactOfOrder", "1.0.2")]
+    [R2APISubmoduleDependency(nameof(ArtifactAPI))]
+
     public class ArtifactOfOrder : BaseUnityPlugin
     {
+
+        // Artifact definition
+        public ArtifactDef Order = ScriptableObject.CreateInstance<ArtifactDef>();
         public void Awake()
         {
             Order.nameToken = "Artifact of Order";
             Order.descriptionToken = "Applies the sequencing effect of a Shrine of Order to a player upon death.";
-            Order.smallIconDeselectedSprite = CreateSprite(Properties.Resources.artifact_unselected);
-            Order.smallIconSelectedSprite = CreateSprite(Properties.Resources.artifact_selected);
+            using (var stream = Assembly.GetExecutingAssembly().GetManifestResourceStream("ArtifactOfOrder.artifactoforder"))
+            {
+                var bundle = AssetBundle.LoadFromStream(stream);
+                Order.smallIconSelectedSprite = bundle.LoadAsset<Sprite>("Assets/Import/Icons/artifact_selected.png");
+                Order.smallIconDeselectedSprite = bundle.LoadAsset<Sprite>("Assets/Import/Icons/artifact_unselected.png");
 
-            ArtifactCatalog.getAdditionalEntries += (list) => { list.Add(Order); };
 
+            }
+            R2API.ArtifactAPI.Add(Order);
             On.RoR2.CharacterMaster.OnBodyDeath += (orig, self, body) =>
             {
                 // The original OnBodyDeath function removes a Dio's Best Friend from the inventory if one is
                 // available, so the easiest way to track usage is to compare the count before and after the function
-                int dioCount = GetDioCount(self);
-
+                int dioCount=0;
+                try
+                {
+                    dioCount = GetDioCount(self);
+                }
+                catch(Exception)
+                {
+                    orig(self, body);
+                    Debug.LogError("ArtifactOfOrder had an Issue while calculating GetDioCount. Please report this.");
+                }
                 orig(self, body);
 
                 // Bail if the artifact is not enabled
@@ -46,7 +66,7 @@ namespace ArtifactOfOrder
                     subjectAsCharacterBody = body,
                     baseToken = "SHRINE_RESTACK_USE_MESSAGE"
                 });
-                EffectManager.SpawnEffect(Resources.Load<GameObject>("Prefabs/Effects/ShrineUseEffect"), 
+                EffectManager.SpawnEffect(Resources.Load<GameObject>("Prefabs/Effects/ShrineUseEffect"),
                     new EffectData
                     {
                         origin = body.footPosition,
@@ -57,22 +77,6 @@ namespace ArtifactOfOrder
             };
         }
 
-        // Artifact definition
-        public ArtifactDef Order = ScriptableObject.CreateInstance<ArtifactDef>();
-
-        // Helper function to load image into a Texture2D, which is then used to generate the sprite
-        // Based on code from: https://github.com/risk-of-thunder/R2Wiki/wiki/Embedding-and-loading-resources-(The-sane-way)
-        public static Sprite CreateSprite(byte[] resourceBytes)
-        {
-            // Check to make sure that the byte array supplied is not null, and throw an appropriate exception if they are.
-            if (resourceBytes == null) throw new ArgumentNullException(nameof(resourceBytes));
-	
-            // Create a temporary texture, then load the texture onto it.
-            var tex = new Texture2D(56, 56, TextureFormat.RGBA32, false);
-            tex.LoadImage(resourceBytes, false);
-	
-            return Sprite.Create(tex, new Rect(0f, 0f, tex.width, tex.height), new Vector2(0.5f, 0.5f));
-        }
 
         /// <summary>
         /// Return true if more then 1 player in-game
@@ -87,7 +91,7 @@ namespace ArtifactOfOrder
         /// </summary>
         private static int GetDioCount(CharacterMaster master)
         {
-            return master.inventory.GetItemCount(ItemIndex.ExtraLife);
+            return master.inventory.GetItemCount(RoR2.RoR2Content.Items.ExtraLife);
         }
     }
 }
