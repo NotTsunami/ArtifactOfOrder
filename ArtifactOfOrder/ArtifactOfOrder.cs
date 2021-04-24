@@ -36,15 +36,15 @@ namespace ArtifactOfOrder
             {
                 // The original OnBodyDeath function removes a Dio's Best Friend from the inventory if one is
                 // available, so the easiest way to track usage is to compare the count before and after the function
-                int dioCount=0;
+                int dioCount = 0;
                 try
                 {
                     dioCount = GetDioCount(self);
                 }
-                catch(Exception)
+                catch (Exception)
                 {
                     orig(self, body);
-                    Debug.LogError("ArtifactOfOrder had an Issue while calculating GetDioCount. Please report this.");
+                    Debug.LogError("ArtifactOfOrder: Error occurred calculating inventory.");
                 }
                 orig(self, body);
 
