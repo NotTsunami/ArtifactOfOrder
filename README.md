@@ -13,6 +13,7 @@ This mod adds a new artifact, that when selected, applies the same inventory seq
 ### Version 1.0.3
 - Updated from using deprecated R2API API
 - New icon, updated assetbundle import
+- Updated AssetBundle
 - Unity project in repo, making it easier for others to make changes
 
 ### Version 1.0.2
