@@ -26,16 +26,14 @@ namespace ArtifactOfOrder
       using (var stream = Assembly.GetExecutingAssembly().GetManifestResourceStream("ArtifactOfOrder.artifactoforder"))
       {
         var bundle = AssetBundle.LoadFromStream(stream);
-        Order.smallIconSelectedSprite = bundle.LoadAsset<Sprite>("Assets/Import/Icons/artifact_selected.png");
-        Order.smallIconDeselectedSprite = bundle.LoadAsset<Sprite>("Assets/Import/Icons/artifact_unselected.png");
-
-
+        Order.smallIconSelectedSprite = bundle.LoadAsset<Sprite>("artifact_selected.png");
+        Order.smallIconDeselectedSprite = bundle.LoadAsset<Sprite>("artifact_unselected.png");
       }
       ContentAddition.AddArtifactDef(Order);
       On.RoR2.CharacterMaster.OnBodyDeath += (orig, self, body) =>
       {
-              // The original OnBodyDeath function removes a Dio's Best Friend from the inventory if one is
-              // available, so the easiest way to track usage is to compare the count before and after the function
+        // The original OnBodyDeath function removes a Dio's Best Friend from the inventory if one is
+        // available, so the easiest way to track usage is to compare the count before and after the function
         int dioCount = 0;
         try
         {
@@ -48,19 +46,19 @@ namespace ArtifactOfOrder
         }
         orig(self, body);
 
-              // Bail if the artifact is not enabled
+        // Bail if the artifact is not enabled
         if (!RunArtifactManager.instance.IsArtifactEnabled(Order.artifactIndex)) return;
 
-              // Bail if body belongs to a monster
+        // Bail if body belongs to a monster
         if (!body.isPlayerControlled) return;
 
-              // Bail if we're single player without a Dio's Best Friend
+        // Bail if we're single player without a Dio's Best Friend
         if (!IsMultiplayer() && (dioCount == GetDioCount(self))) return;
 
-              // Sequence the inventory
+        // Sequence the inventory
         self.inventory.ShrineRestackInventory(new Xoroshiro128Plus(Run.instance.stageRng.nextUlong));
 
-              // Mimic the original Shrine of Order chat broadcast and effect
+        // Mimic the original Shrine of Order chat broadcast and effect
         Chat.SendBroadcastChat(new Chat.SubjectFormatChatMessage
         {
           subjectAsCharacterBody = body,
@@ -68,12 +66,12 @@ namespace ArtifactOfOrder
         });
         EffectManager.SpawnEffect(Resources.Load<GameObject>("Prefabs/Effects/ShrineUseEffect"),
                   new EffectData
-              {
-                origin = body.footPosition,
-                rotation = Quaternion.identity,
-                scale = 1f,
-                color = new Color(1f, 0.23f, 0.6337214f)
-              }, true);
+                  {
+                    origin = body.footPosition,
+                    rotation = Quaternion.identity,
+                    scale = 1f,
+                    color = new Color(1f, 0.23f, 0.6337214f)
+                  }, true);
       };
     }
 
