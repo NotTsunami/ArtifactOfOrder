@@ -1,0 +1,7 @@
+ManifestFileVersion: 0
+CRC: 2261329317
+AssetBundleManifest:
+  AssetBundleInfos:
+    Info_0:
+      Name: artifactoforder
+      Dependencies: {}

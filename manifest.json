@@ -1,10 +1,7 @@
 {
-    "name": "ArtifactOfOrder",
-    "version_number": "1.0.2",
-    "website_url": "https://github.com/NotTsunami/ArtifactOfOrder",
-    "description": "Applies the inventory sequencing of a Shrine of Order on player deaths. Successor to OrderOnDeath and SequenceOnDeath. Now as an artifact!",
-    "dependencies": [
-        "tristanmcpherson-R2API-4.3.5",
-        "bbepis-BepInExPack-5.4.19"
-    ]
+  "name": "ArtifactOfOrder",
+  "version_number": "1.0.3",
+  "website_url": "https://github.com/NotTsunami/ArtifactOfOrder",
+  "description": "Applies the inventory sequencing of a Shrine of Order on player deaths. Successor to OrderOnDeath and SequenceOnDeath. Now as an artifact!",
+  "dependencies": ["tristanmcpherson-R2API-4.3.5", "bbepis-BepInExPack-5.4.19"]
 }

@@ -10,6 +10,12 @@ This mod adds a new artifact, that when selected, applies the same inventory seq
 3. Launch the game and enjoy! To remove you simply need to delete the `ArtifactOfOrder.dll` file.
 
 ## Changelog
+### Version 1.0.3
+- Updated from using deprecated R2API API
+- New icon, updated assetbundle import
+- Updated AssetBundle
+- Unity project in repo, making it easier for others to make changes
+
 ### Version 1.0.2
 - Updated for anniversary update (Thanks SirHamburger!)
 - Switched to local libraries, fewer are included
