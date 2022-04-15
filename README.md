@@ -28,4 +28,4 @@ This mod adds a new artifact, that when selected, applies the same inventory seq
 ### Version 1.0.0
 - Refactored SequenceOnDeath as an artifact
 
-Icon by [Ryan Pallesen](https://github.com/RyanPallesen).
+Icon by [Romy Maghsoudi](https://github.com/rmaghsoudi).
